@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Резюме</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper: #F7F6F1;
+    --ink: #1B211F;
+    --navy: #17324E;
+    --gold: #A9813C;
+    --rule: #D9D3C3;
+    --muted: #5B6660;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .page{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 32px 80px;
+  }
+
+  a{ color: var(--navy); }
+
+  .placeholder{
+    color: var(--gold);
+    border-bottom: 1px dashed var(--gold);
+  }
+
+  /* ---------- STICKY CONTACT BAR ---------- */
+  .stickybar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--ink);
+    color: var(--paper);
+    transform: translateY(-100%);
+    transition: transform 0.35s ease;
+  }
+  .stickybar.show{ transform: translateY(0); }
+  .stickybar-inner{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .stickybar-name{
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stickybar-actions{
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .btn{
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border: 1px solid rgba(247,246,241,0.35);
+    background: transparent;
+    color: var(--paper);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .btn:hover{
+    background: rgba(247,246,241,0.12);
+    border-color: rgba(247,246,241,0.6);
+  }
+  .btn:focus-visible, a:focus-visible, .tag:focus-visible{
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .btn-gold{
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+  .btn-gold:hover{
+    background: #bd944c;
+    border-color: #bd944c;
+  }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 28px;
+    align-items: start;
+    opacity: 0;
+    animation: rise 0.7s ease forwards;
+  }
+
+  @keyframes rise{
+    from{ opacity: 0; transform: translateY(10px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .photo-placeholder{
+    width: 88px;
+    height: 88px;
+    border: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .photo{
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+  }
+
+  .identity h1{
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: 30px;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .identity .role{
+    font-size: 15px;
+    color: var(--navy);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .contact{
+    text-align: right;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+    white-space: nowrap;
+  }
+  .contact a, .contact button.linklike{
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+  }
+  .contact a:hover, .contact button.linklike:hover{
+    color: var(--navy);
+    border-bottom-color: var(--navy);
+  }
+  .linklike{
+    background: none;
+    border: none;
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+  }
+
+  .rule-double{
+    border: none;
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    height: 3px;
+    margin: 22px 0 36px;
+    opacity: 0;
+    animation: rise 0.7s ease 0.1s forwards;
+  }
+
+  /* ---------- HERO STATEMENT ---------- */
+  .hero{
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0 0 40px;
+    max-width: 64ch;
+    opacity: 0;
+    animation: rise 0.7s ease 0.2s forwards;
+  }
+
+  /* ---------- SECTION LABELS ---------- */
+  .section-label{
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin: 0 0 14px;
+    font-weight: 500;
+  }
+
+  /* ---------- LEDGER ---------- */
+  .ledger{
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 44px;
+  }
+  .ledger-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ledger-row:last-child{ border-bottom: none; }
+  .ledger-cell{
+    padding: 13px 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 14.5px;
+    transition: background 0.2s ease;
+  }
+  .ledger-cell:hover{
+    background: rgba(169,129,60,0.07);
+  }
+  .ledger-cell:first-child{
+    border-right: 1px solid var(--rule);
+  }
+  .ledger-cell .figure{
+    font-weight: 600;
+    color: var(--navy);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ledger-cell .label{
+    color: var(--muted);
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    margin-bottom: 44px;
+    position: relative;
+  }
+  .job{
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 24px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .job:first-child{ padding-top: 0; }
+  .job:last-child{ border-bottom: none; }
+
+  .job-date{
+    font-size: 13px;
+    color: var(--muted);
+    padding-top: 3px;
+    position: relative;
+    padding-left: 16px;
+  }
+  .job-date::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .job-date::after{
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 15px;
+    bottom: -22px;
+    width: 1px;
+    background: var(--rule);
+  }
+  .job:last-child .job-date::after{ display: none; }
+
+  .job-company{
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 0 0 2px;
+  }
+  .job-title{
+    font-size: 14px;
+    color: var(--navy);
+    font-weight: 500;
+    margin: 0 0 10px;
+  }
+  .job-body p, .job-body ul{
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+  .job-body ul{
+    padding-left: 18px;
+  }
+  .job-body li{ margin-bottom: 4px; }
+  .sub-role{
+    font-size: 13px;
+    color: var(--muted);
+    margin: 12px 0 4px;
+    font-style: italic;
+  }
+
+  /* ---------- TAGS ---------- */
+  .tags{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-bottom: 44px;
+  }
+  .tag{
+    font-size: 13px;
+    padding: 5px 11px;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .tag:hover{
+    border-color: var(--gold);
+    color: var(--navy);
+  }
+
+  /* ---------- EDUCATION / LANGUAGES ---------- */
+  .two-col{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 44px;
+  }
+  .edu-entry{ margin-bottom: 14px; }
+  .edu-year{
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .edu-name{
+    font-weight: 600;
+    font-size: 14.5px;
+    margin: 2px 0;
+  }
+  .edu-field{
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  .lang-row{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .lang-row:last-child{ border-bottom: none; }
+  .lang-level{ color: var(--muted); }
+
+  /* ---------- CLOSING / CTA ---------- */
+  .closing{
+    border-top: 1px solid var(--ink);
+    padding-top: 24px;
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 64ch;
+  }
+
+  .cta-row{
+    margin-top: 28px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cta-row .btn{
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .cta-row .btn:hover{
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .cta-row .btn-gold{
+    color: var(--ink);
+  }
+  .cta-row .btn-gold:hover{
+    background: #bd944c;
+    color: var(--ink);
+  }
+
+  /* ---------- TOAST ---------- */
+  .toast{
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 13.5px;
+    padding: 10px 18px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 100;
+  }
+  .toast.show{
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 640px){
+    .page{ padding: 36px 20px 60px; }
+    .masthead{
+      grid-template-columns: auto 1fr;
+    }
+    .contact{
+      grid-column: 1 / -1;
+      text-align: left;
+      margin-top: 12px;
+    }
+    .contact button.linklike{ margin-left: 0; }
+    .identity h1{ font-size: 24px; }
+    .hero{ font-size: 18px; }
+    .ledger-row{ grid-template-columns: 1fr; }
+    .ledger-cell:first-child{ border-right: none; border-bottom: 1px solid var(--rule); }
+    .job{ grid-template-columns: 1fr; gap: 6px; }
+    .job-date::after{ display: none; }
+    .two-col{ grid-template-columns: 1fr; gap: 0; }
+    .stickybar-name{ font-size: 13px; }
+    .btn{ padding: 6px 10px; font-size: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .masthead, .rule-double, .hero{ animation: none; opacity: 1; }
+    html{ scroll-behavior: auto; }
+    *{ transition: none !important; }
+  }
+
+  /* ---------- PRINT ---------- */
+  @media print{
+    .stickybar, .toast{ display: none !important; }
+    body{ background: #fff; }
+    .page{ padding: 0; max-width: none; }
+    a{ color: var(--ink); }
+    .masthead, .rule-double, .hero{ animation: none; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY CONTACT BAR -->
+<div class="stickybar" id="stickybar">
+  <div class="stickybar-inner">
+    <span class="stickybar-name placeholder">[ФИО]</span>
+    <div class="stickybar-actions">
+      <a class="btn btn-gold" href="mailto:example@example.com">Написать</a>
+      <button class="btn" id="printBtn" type="button">Скачать PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="images/"></div>
+    <div class="identity">
+      <h1 class="placeholder">[Марков Сергей Николаевич]</h1>
+      <p class="role placeholder">[Руководитель направления сопровождения фондирования]</p>
+    </div>
+    <div class="contact">
+      <div class="placeholder">[Телефон]</div>
+      <button class="linklike placeholder" id="copyEmailBtn" type="button" title="Нажмите, чтобы скопировать">[Email]</button>
+      <div class="placeholder">[@seregka_m]</div>
+    </div>
+  </div>
+  <hr class="rule-double">
+
+  <!-- HERO -->
+  <p class="hero">
+    Профессионал с 10-летним опытом операционного сопровождения кредитования юридических лиц.
+    Прошёл путь от старшего специалиста до руководителя группы внутри одной компании, выстроив
+    подразделение с нуля. Обладаю двойной экспертизой — финансовой и юридической — и работаю как
+    с корпоративной, так и с межбанковской стороной кредитных процессов.
+  </p>
+
+  <!-- LEDGER -->
+  <p class="section-label">Портфель на текущей позиции</p>
+  <div class="ledger" id="ledger">
+    <div class="ledger-row">
+      <div class="ledger-cell"><span class="label">Юрлица-заёмщики группы</span><span class="figure" data-count="3" data-suffix="+">0+</span></div>
+      <div class="ledger-cell"><span class="label">Кредиторы одновременно</span><span class="figure" data-count="10" data-suffix="+, вкл. топ-20">0+, вкл. топ-20</span></div>
+    </div>
+    <div class="ledger-row">
+      <div class="ledger-cell"><span class="label">Межбанковский контур</span><span class="figure">МБК, банковские гарантии</span></div>
+      <div class="ledger-cell"><span class="label">Команда в подчинении</span><span class="figure" data-count="2" data-suffix=" человека">0 человека</span></div>
+    </div>
+    <div class="ledger-row">
+      <div class="ledger-cell"><span class="label">Опыт в отрасли</span><span class="figure" data-count="10" data-suffix=" лет">0 лет</span></div>
+      <div class="ledger-cell"><span class="label">Рост до руководителя группы</span><span class="figure" data-count="1.5" data-decimal="true" data-suffix=" года">за 0 года</span></div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <p class="section-label">Опыт работы</p>
+  <div class="timeline">
+
+    <div class="job">
+      <div class="job-date">Март 2024 —<br>настоящее время</div>
+      <div class="job-body">
+        <p class="job-company">Финтех-компания, Москва</p>
+        <p class="job-title">Руководитель группы сопровождения фондирования</p>
+        <p>
+          Выстроил и возглавил с нуля группу сопровождения кредитных процессов, пройдя путь от
+          старшего специалиста до руководителя за 1,5 года. Сопровождаю привлечение кредитных
+          средств для группы компаний: 3+ юрлица, 10+ кредиторов, включая банки топ-20. Отдельно
+          курирую сопровождение банка группы: договоры МБК и банковские гарантии в части контроля
+          ковенант.
+        </p>
+        <ul>
+          <li>Контроль ключевых кредитных процессов: выборки, целевое использование средств, отлагательные условия</li>
+          <li>Организация контроля ковенант по портфелю с разными требованиями к отчётности</li>
+          <li>Построение с нуля процессов взаимодействия с рейтинговыми агентствами, заключение NDA</li>
+          <li>Автоматизация и оптимизация операционных процессов группы</li>
+        </ul>
+        <p class="sub-role">Старший специалист группы — март 2024 – сентябрь 2025</p>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-date">Июль 2021 —<br>Март 2024</div>
+      <div class="job-body">
+        <p class="job-company">Банк 3</p>
+        <p class="job-title">Ведущий специалист отдела сопровождения кредитных сделок</p>
+        <p>
+          Сопровождал реструктуризацию и рефинансирование кредитного портфеля в рамках масштабной
+          программы кредитных каникул, охватившей широкий периметр заёмщиков крупного и
+          корпоративного бизнеса. Проводил мониторинг финансового состояния заёмщиков и оценку
+          кредитных рисков по требованиям ЦБ РФ 590-П, 611-П.
+        </p>
+        <p>Участвовал в автоматизации рабочих процессов отдела; обучил 3 новых сотрудников.</p>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-date">Октябрь 2019 —<br>Июль 2021</div>
+      <div class="job-body">
+        <p class="job-company">Банк 2</p>
+        <p class="job-title">Отдел сопровождения кредитных сделок / оформления КОД</p>
+        <p class="sub-role">Ведущий специалист (10.2019–08.2020)</p>
+        <ul>
+          <li>Подготовка и оформление кредитных сделок для крупного и корпоративного бизнеса</li>
+          <li>Контроль условий кредитных соглашений до выдачи; взаимодействие по нетиповым структурам сделок</li>
+        </ul>
+        <p class="sub-role">Главный специалист отдела оформления КОД — повышение за результативность (09.2020–07.2021)</p>
+        <ul>
+          <li>Подготовка кредитной и обеспечительной документации по клиентам крупного бизнеса</li>
+          <li>Оформление договоров цессии</li>
+          <li>Подготовка документов на основании решений кредитного комитета по типовым и нетиповым условиям</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-date">Ноябрь 2016 —<br>Май 2019</div>
+      <div class="job-body">
+        <p class="job-company">Следственное управление</p>
+        <p class="job-title">Следователь / Оперуполномоченный — экономические и финансовые преступления</p>
+        <p>
+          Расследование уголовных дел в сфере экономики: анализ финансовых схем, работа с
+          первичной документацией, взаимодействие с банками и налоговыми органами.
+        </p>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-date">Авг 2015 — Янв 2016 /<br>Фев 2014 — Апр 2014</div>
+      <div class="job-body">
+        <p class="job-company">Банк 1</p>
+        <p class="job-title">Старший экономист / Практикант отдела сопровождения кредитных проектов</p>
+        <p>
+          Подготовка договоров по кредитным и обеспечительным сделкам, мониторинг финансового
+          состояния заёмщиков и оценка рисков; анализ финансово-хозяйственной деятельности
+          заёмщиков для кредитного комитета.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SKILLS -->
+  <p class="section-label">Ключевые компетенции</p>
+  <div class="tags">
+    <span class="tag">Кредитный мониторинг</span>
+    <span class="tag">Ковенанты 590-П / 611-П</span>
+    <span class="tag">МБК и банковские гарантии</span>
+    <span class="tag">Кредитно-обеспечительная документация</span>
+    <span class="tag">Договоры цессии</span>
+    <span class="tag">Взаимодействие с рейтинговыми агентствами</span>
+    <span class="tag">Автоматизация процессов</span>
+    <span class="tag">Управление командой</span>
+  </div>
+
+  <!-- EDUCATION / LANGUAGES -->
+  <div class="two-col">
+    <div>
+      <p class="section-label">Образование</p>
+      <div class="edu-entry">
+        <div class="edu-year">2021</div>
+        <div class="edu-name">Институт 2, Ульяновск</div>
+        <div class="edu-field">Юриспруденция</div>
+      </div>
+      <div class="edu-entry">
+        <div class="edu-year">2014</div>
+        <div class="edu-name">Институт 1, Ульяновск</div>
+        <div class="edu-field">Финансы и кредит</div>
+      </div>
+    </div>
+    <div>
+      <p class="section-label">Языки</p>
+      <div class="lang-row"><span>Русский</span><span class="lang-level">Родной</span></div>
+      <div class="lang-row"><span>Английский</span><span class="lang-level">Базовый, в активном развитии</span></div>
+    </div>
+  </div>
+
+  <!-- CLOSING / CTA -->
+  <p class="closing">
+    Рассматриваю позиции на стыке корпоративного и межбанковского кредитования — синдицированное
+    и клубное финансирование, работа с публичным долгом, финансовые институты, treasury-направление.
+  </p>
+  <div class="cta-row">
+    <a class="btn btn-gold" href="mailto:example@example.com">Написать на почту</a>
+    <button class="btn" id="printBtn2" type="button">Скачать как PDF</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Скопировано</div>
+
+<script>
+  // Sticky contact bar: appears once the masthead has scrolled past
+  (function(){
+    var bar = document.getElementById('stickybar');
+    var masthead = document.querySelector('.masthead');
+    function onScroll(){
+      var rect = masthead.getBoundingClientRect();
+      if (rect.bottom < 0) {
+        bar.classList.add('show');
+      } else {
+        bar.classList.remove('show');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Ledger figures count up once scrolled into view
+  (function(){
+    var figures = document.querySelectorAll('.ledger .figure[data-count]');
+    if (!figures.length) return;
+
+    function animate(el){
+      var target = parseFloat(el.getAttribute('data-count'));
+      var suffix = el.getAttribute('data-suffix') || '';
+      var decimal = el.getAttribute('data-decimal') === 'true';
+      var isGrowth = el.textContent.trim().indexOf('за') === 0;
+      var prefix = isGrowth ? 'за ' : '';
+      var duration = 900;
+      var start = null;
+
+      function step(ts){
+        if (!start) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var value = target * eased;
+        var display = decimal ? value.toFixed(1) : Math.round(value);
+        el.textContent = prefix + display + suffix;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = prefix + (decimal ? target.toFixed(1) : target) + suffix;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            figures.forEach(animate);
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.4 });
+      observer.observe(document.getElementById('ledger'));
+    } else {
+      figures.forEach(animate);
+    }
+  })();
+
+  // Copy email to clipboard
+  (function(){
+    var btn = document.getElementById('copyEmailBtn');
+    var toast = document.getElementById('toast');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      var text = btn.textContent.trim();
+      function showToast(msg){
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(function(){ toast.classList.remove('show'); }, 1600);
+      }
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function(){
+          showToast('Скопировано: ' + text);
+        }).catch(function(){
+          showToast('Не удалось скопировать');
+        });
+      } else {
+        showToast(text);
+      }
+    });
+  })();
+
+  // Print / save as PDF
+  (function(){
+    ['printBtn', 'printBtn2'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('click', function(){ window.print(); });
+    });
+  })();
+</script>
+
+</body>
+</html>
